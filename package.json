@@ -1,0 +1,27 @@
+{
+  "name": "doc-editor",
+  "version": "1.0.0",
+  "description": "Editor and collaboration base on Quilljs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shuramita/doc-editor.git"
+  },
+  "keywords": [
+    "quill",
+    "collaboration",
+    "comment"
+  ],
+  "author": "minhtamtt@gmail.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shuramita/doc-editor/issues"
+  },
+  "homepage": "https://github.com/shuramita/doc-editor#readme",
+  "dependencies": {
+    "quilljs": "^0.18.1"
+  }
+}
