@@ -83,7 +83,7 @@
     import Comment from "./modules/Comment";
     import Field from "./modules/Field";
     import TrackChange from "./modules/TrackChange";
-    import QuillBetterTable from 'quill-better-table'
+    // import QuillBetterTable from 'quill-better-table'
 
 
     import FireBaseCollaborator from "./modules/FireBaseCollaborator";
@@ -99,7 +99,7 @@
     Quill.register('modules/field', Field);
     Quill.register('modules/collaborator', FireBaseCollaborator);
     Quill.register('modules/trackChange', TrackChange);
-    Quill.register('modules/better-table', QuillBetterTable);
+    // Quill.register('modules/better-table', QuillBetterTable);
 
     Quill.register({
         'formats/thread': ThreadBlot,
@@ -345,6 +345,9 @@
 </script>
 
 <style>
+    @import '~quill/dist/quill.core.css';
+    @import '~quill/dist/quill.bubble.css';
+    @import '~quill/dist/quill.snow.css';
     .ql-tooltip {
         z-index: 9;
     }
