@@ -206,6 +206,8 @@
                 this.fields[field.name] = field;
             });
 
+
+
             this.editor.on('editor-change',(event)=>{
                 this.term = this.editor.getContents().ops;
             });
@@ -247,7 +249,7 @@
                 this.threads = threads || {};
             })
             this.editor.on('someone-add-new-thread',this.someOneAddedNewThread);
-            this.editor.on('someone-add-new-comment',this.someOneAddedNewComments);
+            this.editor.on('someone-add-new-comment',this.someOneAddedNewComment);
         },
         watch:{
             showCommentBox(value){
@@ -289,7 +291,7 @@
                 // this.threads[threadId] = {id:threadId,position:thread.position,comments:comments};
                 this.$set(this.threads,threadId,{id:threadId, show:true, position:thread.position, comments:comments});
             },
-            someOneAddedNewComments(comment){
+            someOneAddedNewComment(comment){
                 let threadId = comment.thread;
                 console.log('Thread Comment: Some one added new comments?',comment);
                 // this.$set(this.threads,threadId,thread);
