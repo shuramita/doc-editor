@@ -21,17 +21,8 @@ class FireBaseCollaborator extends  Module{
         this.host = this.options.host;
         this.user = this.options.user;
         this.doc = {};
-        let firebaseConfig = {
-            apiKey: "AIzaSyAr5cefhF7nJy46Czz9ysiOaVPiSMqBr9U",
-            authDomain: "localcollaborator.firebaseapp.com",
-            databaseURL: "https://localcollaborator.firebaseio.com",
-            projectId: "localcollaborator",
-            storageBucket: "",
-            messagingSenderId: "217328388248",
-            appId: "1:217328388248:web:7c4dc7e911b826ea"
-        };
         // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
+        firebase.initializeApp(this.options.services[this.options.provider]);
         this.startTime = moment();
         this.initDocument();
     }

@@ -2,11 +2,6 @@
     <div class="row">
         <div class="col-md-3">
             <div class="fields form-group" v-if="!term.readOnly" v-for="field in fields">
-                <!--<label>-->
-                    <!--<strong>{{field.title}}</strong>-->
-                    <!--<p>{{field.description}}</p>-->
-                    <!--<input v-model="field.data" @input="changeFieldValue(field)">-->
-                <!--</label>-->
                 <div class="form-group">
                     <label :for="field.title">{{field.title}}</label>
                     <input :type="field.type" class="form-control" :id="field.name" v-model="field.data" @input="changeFieldValue(field)" >
@@ -83,13 +78,10 @@
     import Comment from "./modules/Comment";
     import Field from "./modules/Field";
     import TrackChange from "./modules/TrackChange";
-    // import QuillBetterTable from 'quill-better-table'
-
-
     import FireBaseCollaborator from "./modules/FireBaseCollaborator";
     import ThreadBlot from "./formats/ThreadBlot";
     import FieldBlot from "./formats/FieldBlot";
-    import CommentBox from './CommentBox';
+    import CommentBox from './vue/CommentBox';
     import SelectionBlot from './formats/SelectionBlot';
     import InsertBlot from './formats/InsertBlot';
     import DeleteBlot from './formats/DeleteBlot';
@@ -99,7 +91,6 @@
     Quill.register('modules/field', Field);
     Quill.register('modules/collaborator', FireBaseCollaborator);
     Quill.register('modules/trackChange', TrackChange);
-    // Quill.register('modules/better-table', QuillBetterTable);
 
     Quill.register({
         'formats/thread': ThreadBlot,
@@ -108,8 +99,6 @@
         'formats/ins':InsertBlot,
         'formats/del':DeleteBlot,
     }, true);
-    // Quill.register('themes/red-bubble', RedBubble, true);
-
     export default {
         components:{
             CommentBox
@@ -159,10 +148,8 @@
             this.id = "quill-editor-"+Math.random().toString(36).substr(2, 9);
         },
         mounted() {
-            // console.log(this.doc);
             let option = {
                 theme: 'snow',
-                // theme: 'red-bubble',
                 readOnly: this.doc.readOnly,
                 modules: {
                     // Note: the order of module are important to other table reuse
@@ -176,8 +163,22 @@
                     },
                     collaborator:{
                         docId:'1001',
-                        host:'http://54.169.170.167:5984',
-                        user:this.user
+                        user:this.user,
+                        provider: 'firebase',
+                        services:{
+                            firebase:{
+                                apiKey: "AIzaSyAr5cefhF7nJy46Czz9ysiOaVPiSMqBr9U",
+                                authDomain: "localcollaborator.firebaseapp.com",
+                                databaseURL: "https://localcollaborator.firebaseio.com",
+                                projectId: "localcollaborator",
+                                storageBucket: "",
+                                messagingSenderId: "217328388248",
+                                appId: "1:217328388248:web:7c4dc7e911b826ea"
+                            },
+                            PouchDB:{
+                                host:'http://54.169.170.167:5984',
+                            }
+                        }
                     },
                     comment:{
                         enabled:true,
@@ -189,16 +190,6 @@
                     trackChange:{
                         enabled: true
                     },
-                    // table: false,  // disable table module
-                    // 'better-table': {
-                    //     operationMenu: {
-                    //         items: {
-                    //             unmergeCells: {
-                    //                 text: 'Another unmerge cells name'
-                    //             }
-                    //         }
-                    //     }
-                    // }
 
                 }
             }
