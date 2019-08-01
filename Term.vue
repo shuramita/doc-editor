@@ -42,6 +42,9 @@
                             <option v-for="field in fields" :value="field.name" :data-field="JSON.stringify(field)"> {{field.title}}</option>
                         </select>
                     </span>
+                    <span class="ql-formats">
+                        <button class="ql-table" value="2"></button>
+                    </span>
                 </div>
                 <div :id="id"></div>
             </div>
@@ -85,20 +88,36 @@
     import SelectionBlot from './formats/SelectionBlot';
     import InsertBlot from './formats/InsertBlot';
     import DeleteBlot from './formats/DeleteBlot';
+    // import * as quillTable from './modules/table';
+    // import Table from './modules/Table.js';
+    // import {
+    //     TableCell,
+    //     TableRow,
+    //     TableBody,
+    //     TableContainer,
+    //     tableId,
+    // } from './formats/TableBlot';
 
     Quill.register('modules/user', User);
     Quill.register('modules/comment', Comment);
     Quill.register('modules/field', Field);
     Quill.register('modules/collaborator', FireBaseCollaborator);
     Quill.register('modules/trackChange', TrackChange);
+    // Quill.register('modules/table', ()=>import('./modules/Table'));
+    // Quill.register('modules/table', Table);
 
     Quill.register({
         'formats/thread': ThreadBlot,
         'formats/field': FieldBlot,
         'formats/mark':SelectionBlot,
         'formats/ins':InsertBlot,
-        'formats/del':DeleteBlot,
+        'formats/del':DeleteBlot
     }, true);
+    // Quill.register(TableContainer);
+    // Quill.register(TableBody);
+    // Quill.register(TableRow);
+    // Quill.register(TableCell);
+
     export default {
         components:{
             CommentBox
@@ -141,7 +160,8 @@
                 user:{
                     id: Math.random().toString(36).substr(2, 9),
                     name:'Tam Nguyen'
-                }
+                },
+                // table: true
             }
         },
         created(){
@@ -156,6 +176,9 @@
                     toolbar: {
                         container:"#toolbarContainer",
                         handlers:{
+                            table:()=>{
+                                this.editor.getModule('table').insertTable(2,2);
+                            }
                         }
                     },
                     user:{
@@ -190,6 +213,7 @@
                     trackChange:{
                         enabled: true
                     },
+                    table: true
 
                 }
             }

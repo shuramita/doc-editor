@@ -35,15 +35,15 @@ class FieldBlot extends Inline{
 
         return node;
     }
-    constructor(domNode) {
-        super(domNode);
+    // constructor(domNode) {
+        // super(domNode);
 
         // Bind our click handler to the class.
         // this.clickHandler = this.clickHandler.bind(this);
         // domNode.addEventListener('click',this.clickHandler);
 
         // this.toolTip = new FieldBlotToolTip();
-    }
+    // }
     clickHandler(event) {
         console.log("field click was clicked. Blot: ", this);
         // show fix box

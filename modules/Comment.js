@@ -22,7 +22,7 @@ class Comment extends  Module{
         // quill.on('selection-change', this.showCommandButton.bind(this));
 
         // this.toolbar = quill.getModule('toolbar');
-        console.log(this.toolbar);
+        // console.log(this.toolbar);
         // if (typeof this.toolbar !== 'undefined')
         //     this.toolbar.addHandler('thread', this.showCommandThread);
 

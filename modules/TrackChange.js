@@ -70,7 +70,7 @@ class TrackChange extends  Module{
     inHandledChanges(delta){
         let handledChange  = '';
         this.changes.map((value)=>{
-            if(delta.ops && delta.ops[1].hasOwnProperty(value)) {
+            if(delta.ops && delta.ops.length > 1 && delta.ops[1].hasOwnProperty(value)) {
                 handledChange = value;
             }
         });
