@@ -1,81 +1,103 @@
 <template>
-    <div class="row">
-        <div class="col-md-3">
-            <div class="fields form-group" v-if="!term.readOnly" v-for="field in fields">
-                <div class="form-group">
-                    <label :for="field.title">{{field.title}}</label>
-                    <input :type="field.type" class="form-control" :id="field.name" v-model="field.data" @input="changeFieldValue(field)" >
-                    <small class="form-text text-muted">{{field.description}}</small>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="block">
-                <div id="toolbarContainer">
+    <div>
+        <div class="row">
+            <div class="col">  <div id="toolbarContainer">
                     <span class="ql-formats">
-                        <select class="ql-font"></select>
+                        <select class="ql-font">
+                                <option value="Playfair Display">Playfair Display</option>
+                                <option value="Arial">Arial</option>
+                                <option value="Caveat">Caveat</option>
+                        </select>
                         <select class="ql-size"></select>
                     </span>
-                    <span class="ql-formats">
+                <span class="ql-formats">
                         <button class="ql-bold"></button>
                         <button class="ql-italic"></button>
                         <button class="ql-underline"></button>
                         <button class="ql-strike"></button>
                     </span>
-                    <span class="ql-formats">
-                        <button class="ql-direction" value="rtl"></button>
-                        <select class="ql-align"></select>
-                    </span>
-                    <span class="ql-formats">
+                <span class="ql-formats">
+                    <button class="ql-direction" value="rtl"></button>
+                    <select class="ql-align"></select>
+                </span>
+                <span class="ql-formats">
+                  <button class="ql-list" value="ordered"></button>
+                  <button class="ql-list" value="bullet"></button>
+                  <button class="ql-indent" value="-1"></button>
+                  <button class="ql-indent" value="+1"></button>
+                </span>
+                <span class="ql-formats">
                         <button class="ql-link"></button>
                         <button class="ql-image"></button>
-                        <button class="ql-video"></button>
-                        <button class="ql-formula"></button>
+                    <!--<button class="ql-video"></button>-->
+                    <!--<button class="ql-formula"></button>-->
                     </span>
 
-                    <span class="ql-formats">
+                <span class="ql-formats">
                         <button class="ql-clean"></button>
                     </span>
-                    <span class="ql-formats">
-                        <button class="ql-thread"></button>
+                <span class="ql-formats">
+                        <!--<button class="ql-thread"></button>-->
                         <select class="ql-field">
                             <option v-for="field in fields" :value="field.name" :data-field="JSON.stringify(field)"> {{field.title}}</option>
                         </select>
                     </span>
-                    <span class="ql-formats">
+                <span class="ql-formats">
                         <button class="ql-table" value="2"></button>
                     </span>
-                </div>
-                <div :id="id"></div>
-            </div>
+                <span class="ql-formats">
+                        <button class="ql-google-doc"></button>
+                    </span>
+            </div> </div>
         </div>
-        <div class="col-md-3">
-            <div class="comments" id="comments">
-                <CommentBox v-if="showCommentBox" v-bind:module="commentModule" v-bind:range="commentRange" v-bind:bounds="commentBounds"
-                            v-on:commentAdded="updateCommentThread"
-                            v-on:threadAdded="userAddNewThread"
-                ></CommentBox>
-                <div class="thread-contents" v-for="(thread,key) in threads">
-                    <div class="thread" v-if="thread.show && thread.position" v-bind:style="{ top: thread.position.top}">
-                        <div>{{thread.id}}</div>
-                        <div class="comment" v-for="comment in thread.comments"> User {{comment.by.name}} said: {{comment.text}} </div>
-                        <input v-model="thread.newComment"> <button v-on:click="sendComment(thread)">SEND</button>
+        <div class="row  my-5">
+            <div class="col-md-2 my-5">
+                <div class="fields form-group" v-if="!term.readOnly" v-for="field in fields">
+                    <div class="form-group">
+                        <label :for="field.title">{{field.title}}</label>
+                        <input :type="field.type" class="form-control" :id="field.name" v-model="field.data" @input="changeFieldValue(field)" >
+                        <small class="form-text text-muted">{{field.description}}</small>
                     </div>
-
                 </div>
             </div>
+            <div class="col-md-7">
+                <div class="block">
+                    <div id="externalStyle"></div>
+
+                    <div :id="id"></div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="comments" id="comments">
+                    <CommentBox v-if="showCommentBox" v-bind:module="commentModule" v-bind:range="commentRange" v-bind:bounds="commentBounds"
+                                v-on:commentAdded="updateCommentThread"
+                                v-on:threadAdded="userAddNewThread"
+                    ></CommentBox>
+                    <div class="thread-contents" v-for="(thread,key) in threads">
+                        <div class="thread" v-if="thread.show && thread.position" v-bind:style="{ top: thread.position.top}">
+                            <div>{{thread.id}}</div>
+                            <div class="comment" v-for="comment in thread.comments"> User {{comment.by.name}} said: {{comment.text}} </div>
+                            <input v-model="thread.newComment"> <button v-on:click="sendComment(thread)">SEND</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+            <hr>
+
         </div>
-
-
-        <hr>
-
     </div>
+
 
 </template>
 
 <script>
 
     import Quill from 'quill';
+
+    const Delta = Quill.import('delta');
 
     import User from './modules/User';
     import Comment from "./modules/Comment";
@@ -84,40 +106,44 @@
     import FireBaseCollaborator from "./modules/FireBaseCollaborator";
     import ThreadBlot from "./formats/ThreadBlot";
     import FieldBlot from "./formats/FieldBlot";
+    import SizeAttributor from './formats/size'
+    import FontAttributor from './formats/font';
+    import MarginStyle from './formats/margin';
+    import LineHeight from './formats/line-height';
+    import PaddingBottomStyle from './formats/padding-bottom';
+    import GDocListClass from './formats/gdoc-class';
+
     import CommentBox from './vue/CommentBox';
     import SelectionBlot from './formats/SelectionBlot';
     import InsertBlot from './formats/InsertBlot';
     import DeleteBlot from './formats/DeleteBlot';
-    // import * as quillTable from './modules/table';
-    // import Table from './modules/Table.js';
-    // import {
-    //     TableCell,
-    //     TableRow,
-    //     TableBody,
-    //     TableContainer,
-    //     tableId,
-    // } from './formats/TableBlot';
+    import GoogleDoc from './modules/GoogleDoc';
 
     Quill.register('modules/user', User);
     Quill.register('modules/comment', Comment);
     Quill.register('modules/field', Field);
     Quill.register('modules/collaborator', FireBaseCollaborator);
     Quill.register('modules/trackChange', TrackChange);
-    // Quill.register('modules/table', ()=>import('./modules/Table'));
-    // Quill.register('modules/table', Table);
+    Quill.register('modules/googleDoc', GoogleDoc);
 
     Quill.register({
         'formats/thread': ThreadBlot,
         'formats/field': FieldBlot,
         'formats/mark':SelectionBlot,
         'formats/ins':InsertBlot,
-        'formats/del':DeleteBlot
+        'formats/del':DeleteBlot,
+        // 'formats/list-container':GDocListClass,
     }, true);
-    // Quill.register(TableContainer);
-    // Quill.register(TableBody);
-    // Quill.register(TableRow);
-    // Quill.register(TableCell);
 
+
+    Quill.register(FontAttributor,true);
+    Quill.register(SizeAttributor,true);
+    Quill.register(MarginStyle,true);
+    Quill.register(LineHeight,true);
+    Quill.register(GDocListClass,true);
+    Quill.register(PaddingBottomStyle,true);
+
+    console.log('Import list', Quill.imports);
     export default {
         components:{
             CommentBox
@@ -178,6 +204,9 @@
                         handlers:{
                             table:()=>{
                                 this.editor.getModule('table').insertTable(2,2);
+                            },
+                            'google-doc':()=>{
+                                console.log('google doc toolbar handler');
                             }
                         }
                     },
@@ -211,13 +240,18 @@
                         fields:this.fields
                     },
                     trackChange:{
-                        enabled: true
+                        enabled: false
                     },
-                    table: true
-
+                    table: true,
+                    googleDoc:{
+                        docId: '1Ii8uAtEug7PHezao5se2dbt2JseAMr3ZqLL2aAHNoS4'
+                    }
                 }
             }
             this.editor = new Quill("#"+this.id, option);
+            this.editor.clipboard.addMatcher('OL', function(node, delta) {
+                return delta.compose(new Delta().retain(delta.length(), { 'list-ordered-class': node.getAttribute('class') }));
+            });
 
             // TODO: we should not set content at this point because that other module can modify the data with latest state
             this.editor.setContents(this.doc.deltas,'silent');
@@ -365,6 +399,27 @@
     @import '~quill/dist/quill.core.css';
     @import '~quill/dist/quill.bubble.css';
     @import '~quill/dist/quill.snow.css';
+    /*., .block*/
+    .ql-toolbar {
+        width: 100%;
+        position: fixed;
+        top: 10px;
+        z-index: 9;
+        background: white;
+    }
+    .ql-snow .ql-picker-label::before {
+        width: max-content;
+    }
+    .ql-container {
+        width: 21cm;
+        min-height: 29.7cm;
+        padding: 2cm;
+        margin: 1.5cm auto;
+        border: 1px #D3D3D3 solid;
+        border-radius: 5px;
+        background: white;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
     .ql-tooltip {
         z-index: 9;
     }
@@ -410,4 +465,6 @@
     del{
         color: red;
     }
+    ::-moz-selection { background: yellow; }
+    ::selection { background: yellow; }
 </style>
