@@ -2,7 +2,9 @@ import Quill from 'quill';
 const Module = Quill.import('core/module');
 import FieldBlot from '../formats/FieldBlot';
 import FieldBlotToolTip from '../ui/FieldBlotToolTip';
-
+Quill.register({
+    'formats/field': FieldBlot,
+}, true);
 class Field extends  Module{
     constructor(quill, options) {
         super(quill, options);

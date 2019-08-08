@@ -37,15 +37,13 @@
                         <button class="ql-clean"></button>
                     </span>
                 <span class="ql-formats">
-                        <!--<button class="ql-thread"></button>-->
                         <select class="ql-field">
                             <option v-for="field in fields" :value="field.name" :data-field="JSON.stringify(field)"> {{field.title}}</option>
                         </select>
                     </span>
                 <span class="ql-formats">
+                        <button class="ql-trackChange"></button>
                         <button class="ql-table" value="2"></button>
-                    </span>
-                <span class="ql-formats">
                         <button class="ql-google-doc"></button>
                     </span>
             </div> </div>
@@ -97,27 +95,13 @@
 
     import Quill from 'quill';
 
-    const Delta = Quill.import('delta');
-
     import User from './modules/User';
     import Comment from "./modules/Comment";
     import Field from "./modules/Field";
     import TrackChange from "./modules/TrackChange";
     import FireBaseCollaborator from "./modules/FireBaseCollaborator";
-    import ThreadBlot from "./formats/ThreadBlot";
-    import FieldBlot from "./formats/FieldBlot";
-    import SizeAttributor from './formats/size'
-    import FontAttributor from './formats/font';
-    import MarginStyle from './formats/margin';
-    import LineHeight from './formats/line-height';
-    import PaddingBottomStyle from './formats/padding-bottom';
-    import GDocListClass from './formats/gdoc-class';
-
-    import CommentBox from './vue/CommentBox';
-    import SelectionBlot from './formats/SelectionBlot';
-    import InsertBlot from './formats/InsertBlot';
-    import DeleteBlot from './formats/DeleteBlot';
     import GoogleDoc from './modules/GoogleDoc';
+    import HtmlImport from "./modules/HtmlImport";
 
     Quill.register('modules/user', User);
     Quill.register('modules/comment', Comment);
@@ -125,23 +109,9 @@
     Quill.register('modules/collaborator', FireBaseCollaborator);
     Quill.register('modules/trackChange', TrackChange);
     Quill.register('modules/googleDoc', GoogleDoc);
+    Quill.register('modules/htmlImport', HtmlImport);
 
-    Quill.register({
-        'formats/thread': ThreadBlot,
-        'formats/field': FieldBlot,
-        'formats/mark':SelectionBlot,
-        'formats/ins':InsertBlot,
-        'formats/del':DeleteBlot,
-        // 'formats/list-container':GDocListClass,
-    }, true);
-
-
-    Quill.register(FontAttributor,true);
-    Quill.register(SizeAttributor,true);
-    Quill.register(MarginStyle,true);
-    Quill.register(LineHeight,true);
-    Quill.register(GDocListClass,true);
-    Quill.register(PaddingBottomStyle,true);
+    import CommentBox from './vue/CommentBox';
 
     console.log('Import list', Quill.imports);
     export default {
@@ -207,6 +177,9 @@
                             },
                             'google-doc':()=>{
                                 console.log('google doc toolbar handler');
+                            },
+                            trackChange:()=>{
+                                this.editor.getModule('trackChange').toggleEnabled();
                             }
                         }
                     },
@@ -245,13 +218,13 @@
                     table: true,
                     googleDoc:{
                         docId: '1Ii8uAtEug7PHezao5se2dbt2JseAMr3ZqLL2aAHNoS4'
+                    },
+                    htmlImport:{
+                        enabled: false,
                     }
                 }
             }
             this.editor = new Quill("#"+this.id, option);
-            this.editor.clipboard.addMatcher('OL', function(node, delta) {
-                return delta.compose(new Delta().retain(delta.length(), { 'list-ordered-class': node.getAttribute('class') }));
-            });
 
             // TODO: we should not set content at this point because that other module can modify the data with latest state
             this.editor.setContents(this.doc.deltas,'silent');

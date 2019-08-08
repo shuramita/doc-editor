@@ -1,7 +1,12 @@
 import Quill from 'quill';
 const Module = Quill.import('core/module');
 import * as moment from 'moment';
-
+import ThreadBlot from "../formats/ThreadBlot";
+import SelectionBlot from "../formats/SelectionBlot";
+Quill.register({
+    'formats/mark':SelectionBlot,
+    'formats/thread': ThreadBlot
+}, true);
 class Comment extends  Module{
 
     constructor(quill, options) {
@@ -17,14 +22,6 @@ class Comment extends  Module{
         }else{
             throw `the Comment module require User module, it should loaded first!`;
         }
-
-        // this.container = document.querySelector(options.container);
-        // quill.on('selection-change', this.showCommandButton.bind(this));
-
-        // this.toolbar = quill.getModule('toolbar');
-        // console.log(this.toolbar);
-        // if (typeof this.toolbar !== 'undefined')
-        //     this.toolbar.addHandler('thread', this.showCommandThread);
 
         let comments = document.getElementsByClassName('ql-thread');
 
