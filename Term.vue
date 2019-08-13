@@ -155,7 +155,7 @@
                 commentModule:null,
                 user:{
                     id: Math.random().toString(36).substr(2, 9),
-                    name:'Tam Nguyen'
+                    name: 'Tam Nguyen'
                 },
                 // table: true
             }
@@ -245,7 +245,7 @@
             // this.fields = this.editor.getModule('field').getFields();
             // console.log('Fields extracted from content',this.fields);
 
-            // TODO: will move to Module later
+            // TODO: will move to Module later if we target blank UI
             this.editor.on('selection-change',(range, oldRange, source)=>{
                 console.log('user select text, we will show comment box ');
 
