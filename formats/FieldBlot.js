@@ -49,12 +49,16 @@ class FieldBlot extends Inline{
         // show fix box
         //get tooltip,
     }
-    optimize(context){
-        // return false;
-        // super.optimize(context);
-        // console.log('context field blot',context);
-        // console.log(this);
-    }
+    // optimize(...args){
+    //     // return false;
+    //     // super.optimize(context);
+    //     console.log('FieldBlot: optimize',args);
+    //     // console.log(this);
+    // }
+    // update(mutations,context) {
+    //     console.log('FieldBlot: update',mutations, context);
+    // }
+
     static formats(node) {
         // We still need to report unregistered embed formats
         let format = {};

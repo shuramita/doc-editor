@@ -40,9 +40,10 @@
                         <select class="ql-field">
                             <option v-for="field in fields" :value="field.name" :data-field="JSON.stringify(field)"> {{field.title}}</option>
                         </select>
+                        <button class="ql-field-scan"></button>
                     </span>
                 <span class="ql-formats">
-                        <button class="ql-trackChange"></button>
+
                         <button class="ql-table" value="2"></button>
                         <button class="ql-google-doc"></button>
                     </span>
@@ -102,6 +103,7 @@
     import FireBaseCollaborator from "./modules/FireBaseCollaborator";
     import GoogleDoc from './modules/GoogleDoc';
     import HtmlImport from "./modules/HtmlImport";
+    import PageBreak from "./modules/PageBreak";
 
     Quill.register('modules/user', User);
     Quill.register('modules/comment', Comment);
@@ -110,6 +112,7 @@
     Quill.register('modules/trackChange', TrackChange);
     Quill.register('modules/googleDoc', GoogleDoc);
     Quill.register('modules/htmlImport', HtmlImport);
+    Quill.register('modules/pageBreak', PageBreak);
 
     import CommentBox from './vue/CommentBox';
 
@@ -221,6 +224,9 @@
                     },
                     htmlImport:{
                         enabled: false,
+                    },
+                    pageBreak:{
+                        enabled:false
                     }
                 }
             }
@@ -236,9 +242,6 @@
                 this.$emit('fieldChange',field);
                 this.fields[field.name] = field;
             });
-
-
-
             this.editor.on('editor-change',(event)=>{
                 this.term = this.editor.getContents().ops;
             });
@@ -370,8 +373,8 @@
 
 <style>
     @import '~quill/dist/quill.core.css';
-    @import '~quill/dist/quill.bubble.css';
     @import '~quill/dist/quill.snow.css';
+    @import '~quill/dist/quill.bubble.css';
     /*., .block*/
     .ql-toolbar {
         width: 100%;
@@ -440,4 +443,13 @@
     }
     ::-moz-selection { background: yellow; }
     ::selection { background: yellow; }
+    .page-break {
+        height: 15px;
+        width: 100%;
+        background: red;
+        /* position: unset; */
+        left: 0;
+        display: block;
+        margin: 1px;
+    }
 </style>

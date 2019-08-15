@@ -5,6 +5,8 @@ class ListIndentClass extends Parchment.ClassAttributor {
     add(node, value){
         console.log('ListIndentClass: add',node);
         node.dataset.classList = value;
+        // TODO: this has an issue and not stable to detect indent from class
+        // sometime lst-XXXXX-0 and sometime 1, it needs to have a better way to identify this for list
         return super.add(node, value[0].split('-')[2]);
 
         // return false;

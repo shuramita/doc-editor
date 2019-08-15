@@ -6,21 +6,34 @@ Quill.register({
     'formats/field': FieldBlot,
 }, true);
 class Field extends  Module{
+    // tokenRgx ='(\\{\\{.*?\\}\\})';
     constructor(quill, options) {
         super(quill, options);
         this.editor = quill;
         this.options = options;
         this.container = document.querySelector(options.container);
-        // this.toolbar = quill.getModule('toolbar');
+        this.tokenRgx = new RegExp('(\\{\\{.*?\\}\\})','g');
+        this.toolbar = quill.getModule('toolbar');
         // console.log(this.toolbar);
         // this.toolbar.addHandler('thread', this.showCommandThread);
 
-        // let qlFields = document.querySelectorAll('.ql-field option');
-        // if (qlFields) {
-        //     [].slice.call( qlFields ).forEach(function ( qlField ) {
-        //
-        //     });
-        // }
+        let qlFieldScanButtons = document.querySelectorAll('.ql-field-scan');
+        if (qlFieldScanButtons) {
+            [].slice.call( qlFieldScanButtons ).forEach( ( qlFieldScanButton ) =>{
+                console.log('Field: register scan event for toolbar button');
+                qlFieldScanButton.innerHTML = options.scanIcon;
+                qlFieldScanButton.addEventListener('click',()=>{
+                    let tokens = this.scanTokens();
+                    tokens.forEach(token=>{
+                        console.log(token);
+                        token.indices.forEach(index=>{
+                            // this.quill.formatText(index,token.token.length,{'field':{name:token.token,type:'string'}})
+                        })
+
+                    })
+                });
+            });
+        }
         // console.log('FIELDS',fields);
         this.editor.on('text-change',this.handleFieldChange.bind(this));
         this.tooltip = new FieldBlotToolTip(quill,this.options.bounds);
@@ -99,6 +112,48 @@ class Field extends  Module{
         }
         return fields;
     }
+    /*
+       This function using to scan all definition of token with regular express
+    * */
+    scanTokens(regx = null){
+        regx = regx || this.tokenRgx;
+        let totalText = this.quill.getText();
+        // ES 6
+        let allFoundTokens = totalText.match(regx);
+        console.log('Field: detected tokens',allFoundTokens);
+        let fields = [];
+        if(allFoundTokens) {
+            let tokens = [...new Set(allFoundTokens)];
+            console.log('Field: all scanned fields',tokens);
+            tokens.forEach(token=>{
+                fields.push({
+                    token: token,
+                    indices: this.getIndicesOf(totalText,token)
+                })
+
+            })
+            console.log('Field: all scanned fields', fields);
+            return fields;
+        }
+
+
+    }
+
+    getIndicesOf(str, searchStr) {
+        let searchStrLen = searchStr.length;
+        let startIndex = 0,
+            index,
+            indices = [];
+        while (
+            (index = str.toUpperCase().indexOf(searchStr.toUpperCase(), startIndex)) >
+            -1
+            ) {
+            indices.push(index);
+            startIndex = index + searchStrLen;
+        }
+            console.log('Field:',indices);
+        return indices;
+    }
     static getFieldFromDocument(name){
         let fieldNodes = document.querySelectorAll(`${FieldBlot.tagName}[class=${FieldBlot.className}]`);
         for(let i=0;i<fieldNodes.length;i++) {
@@ -117,7 +172,8 @@ class Field extends  Module{
     }
 
 }
-Comment.DEFAULTS = {
-    buttonIcon: '<svg viewbox="0 0 18 18"><circle class="ql-fill" cx="7" cy="7" r="1"></circle><circle class="ql-fill" cx="11" cy="7" r="1"></circle><path class="ql-stroke" d="M7,10a2,2,0,0,0,4,0H7Z"></path><circle class="ql-stroke" cx="9" cy="9" r="6"></circle></svg>'
+Field.DEFAULTS = {
+    buttonIcon: '<svg viewbox="0 0 18 18"><circle class="ql-fill" cx="7" cy="7" r="1"></circle><circle class="ql-fill" cx="11" cy="7" r="1"></circle><path class="ql-stroke" d="M7,10a2,2,0,0,0,4,0H7Z"></path><circle class="ql-stroke" cx="9" cy="9" r="6"></circle></svg>',
+    scanIcon:'<svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="qrcode" class="svg-inline--fa fa-qrcode fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M0 224h192V32H0v192zM64 96h64v64H64V96zm192-64v192h192V32H256zm128 128h-64V96h64v64zM0 480h192V288H0v192zm64-128h64v64H64v-64zm352-64h32v128h-96v-32h-32v96h-64V288h96v32h64v-32zm0 160h32v32h-32v-32zm-64 0h32v32h-32v-32z"></path></svg>'
 };
 export {Field as default}
