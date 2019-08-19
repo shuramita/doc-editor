@@ -17,7 +17,6 @@ class PageBreak extends  Module{
         if(this.options.enabled){
             this.quill.on('text-change', this.calculatePagePositionIndex.bind(this));
         }
-        this.currentFlow = null;
     }
     getUser(){
         return this.quill.getModule('User').getUser();
