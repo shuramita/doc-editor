@@ -5,15 +5,18 @@ import FieldBlotToolTip from '../ui/FieldBlotToolTip';
 Quill.register({
     'formats/field': FieldBlot,
 }, true);
+
 class Field extends  Module{
     // tokenRgx ='(\\{\\{.*?\\}\\})';
+
+
     constructor(quill, options) {
         super(quill, options);
         this.editor = quill;
-        this.options = options;
+        // this.options = options;
         this.container = document.querySelector(options.container);
         this.tokenRgx = new RegExp('(\\{\\{.*?\\}\\})','g');
-        this.toolbar = quill.getModule('toolbar');
+        this.toolbar = this.editor.getModule('toolbar');
         // console.log(this.toolbar);
         // this.toolbar.addHandler('thread', this.showCommandThread);
 

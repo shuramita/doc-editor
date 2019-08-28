@@ -220,7 +220,8 @@
                     },
                     table: true,
                     googleDoc:{
-                        docId: '1Ii8uAtEug7PHezao5se2dbt2JseAMr3ZqLL2aAHNoS4'
+                        docId: '1Ii8uAtEug7PHezao5se2dbt2JseAMr3ZqLL2aAHNoS4',
+                        converterApi:'/api/doc'
                     },
                     htmlImport:{
                         enabled: false,

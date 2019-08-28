@@ -20,7 +20,8 @@ class GoogleDoc extends  Module{
     }
 
     getHTMLDocContent(){
-        return axios.get(`/api/doc/${this.options.docId}`);
+        let api = this.options.converterApi;
+        return axios.get(`${api}/${this.options.docId}`);
     }
     updateEditorFromGoogleDoc(){
         console.log("GoogleDoc: get content from google doc cloud with Id",this.options.docId);
@@ -38,6 +39,7 @@ class GoogleDoc extends  Module{
     }
 }
 GoogleDoc.DEFAULTS = {
+    converterApi:'/api/doc',
     buttonIcon: '<?xml version="1.0" encoding="UTF-8"?>' +
         '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="48px" height="48px" viewBox="0 0 48 48" version="1.1">' +
         '<g id="surface225007">' +
